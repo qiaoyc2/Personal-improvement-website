@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Improvement Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #E1DAD8; /* Light Taupe */
+            color: #4a4a4a;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+        #suggestionsBox {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #B69C91; /* Toffee Brown */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            width: 80%;
+            max-width: 500px;
+        }
+        #generateButton {
+            background-color: #d3d3d3;
+            border: none;
+            color: #333;
+        }
+        #closeButton {
+            display: block;
+            margin: 0 auto;
+            background-color: #4a4a4a;
+            color: #ffffff;
+        }
+        .form-label {
+            color: #4a4a4a;
+        }
+        .list-group-item {
+            background-color: #76819C; /* Pale Blue */
+            color: #ffffff;
+            border: none;
+            transition: color 0.3s, text-decoration 0.3s;
+            cursor: pointer;
+        }
+        .list-group-item:hover {
+            color: #B69C91; /* Toffee Brown */
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #B69C91;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <h1 class="text-center mb-4">Personal Improvement Generator</h1>
+    <form id="improvementForm" class="mb-4">
+        <div class="mb-3">
+            <label for="pastAchievements" class="form-label">Things You Did in the Past:</label>
+            <textarea id="pastAchievements" class="form-control" placeholder="E.g., completed a marathon, learned Python" oninput="showGenerateButton()"></textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="interests" class="form-label">Your Current Interests:</label>
+            <input type="text" id="interests" class="form-control" placeholder="E.g., photography, coding, hiking" oninput="showGenerateButton()">
+        </div>
+        
+        <div class="mb-3">
+            <label for="goals" class="form-label">Goals for the Next 3 Months:</label>
+            <textarea id="goals" class="form-control" placeholder="E.g., build a personal website, run 5K every week" oninput="showGenerateButton()"></textarea>
+        </div>
+        
+        <button type="button" id="generateButton" class="btn" style="display: none;" onclick="generateSuggestions()">Generate</button>
+    </form>
+
+    <div id="overlay"></div>
+    <div id="suggestionsBox" class="p-4">
+        <h2 class="text-center">Suggestions for Improvement</h2>
+        <div id="suggestions"></div>
+        <button id="closeButton" class="btn btn-secondary mt-3" onclick="closeSuggestions()">Close</button>
+    </div>
+
+    <audio id="celebrationSound" src="https://www.myinstants.com/media/sounds/success-fanfare.mp3" preload="auto"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showGenerateButton() {
+            document.getElementById('generateButton').style.display = 'inline-block';
+        }
+
+        function generateSuggestions() {
+            const pastAchievements = document.getElementById('pastAchievements').value;
+            const interests = document.getElementById('interests').value;
+            const goals = document.getElementById('goals').value;
+            
+            let suggestions = "<ul class='list-group'>";
+            if (pastAchievements) {
+                suggestions += `<li class='list-group-item' onclick='markAsCompleted(this)'>Reflect on your past achievements to set bigger challenges.</li>`;
+            }
+            if (interests) {
+                suggestions += `<li class='list-group-item' onclick='markAsCompleted(this)'>Find workshops or courses to deepen your knowledge in ${interests}.</li>`;
+            }
+            if (goals) {
+                suggestions += `<li class='list-group-item' onclick='markAsCompleted(this)'>Break down your goals into weekly actionable steps.</li>`;
+                suggestions += `<li class='list-group-item' onclick='markAsCompleted(this)'>Set reminders to track your progress on your 3-month goals.</li>`;
+            }
+            suggestions += "<li class='list-group-item' onclick='markAsCompleted(this)'>Connect with others who share your interests for motivation.</li>";
+            suggestions += "</ul>";
+            
+            document.getElementById('suggestions').innerHTML = suggestions;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('suggestionsBox').style.display = 'block';
+        }
+
+        function closeSuggestions() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('suggestionsBox').style.display = 'none';
+        }
+
+        function markAsCompleted(item) {
+            item.classList.toggle('completed');
+            if (item.classList.contains('completed')) {
+                document.getElementById('celebrationSound').play();
+            }
+        }
+    </script>
+</body>
+</html>
